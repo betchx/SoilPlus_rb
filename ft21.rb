@@ -11,17 +11,18 @@ module SoilPlus
       NAME = "FT21"
       EXT = ".f21"
 
-      def initialise(basename = nil)
+      def initialize(basename = nil)
         @io = nil
         @data = {}
         open(basename) if basename
       end
 
-      def open(basaname)
+      def open(basename)
         @filename = basename + EXT
         @filename.sub!(EXT+EXT,EXT)
         @io = FortranUnformattedFile.new(@filename)
-        while arr = @io.get("a4VVVa4a4EEEE*")
+        while line = @io.next_record
+          arr = line.unpack("a4VVVa4a4EEEE*")
           idnt = arr.shift   # データ種別
           nstp = arr.shift   # ステップ数
           idummy = arr.shift # 等価線形解析の収束回数
@@ -33,7 +34,7 @@ module SoilPlus
           stim = arr.shift   # 最大応答値発生時刻
           # arrののこりは時刻暦毎の応答値
 
-          tag = indt+ifd1+ifd2+"@#{ige}"
+          tag = idnt+ifd1+ifd2+"@#{ige}"
           @data[tag] = arr
 
         end
@@ -47,7 +48,7 @@ module SoilPlus
       %w(x y z).each do |k|
         u = k.upcase
         kk = k + k
-        PAIRS["s#{kk}"]  = "HSTRSTG  #{u}  "
+        PAIRS["s#{kk}"]  = "HSTRSIG  #{u}  "
         PAIRS["E#{kk}"]  = "HSRNEPS  #{u}  "
         PAIRS["F#{k}_1"] = "HFRCFRC  #{u}  "
         PAIRS["F#{k}_2"] = "HFRCFRC2 #{u}  "
@@ -57,17 +58,26 @@ module SoilPlus
         PAIRS["v#{k}"]   = "HVEL #{u}      "
         PAIRS["u#{k}"]   = "HDSP #{u}      "
       end
-      %w(xy, yz, zx).each do |k|
-        rev = x.reverse
-        PAIRS["s#{k}"]   = "HSTR TAU #{k.upcase}  "
-        PAIRS["s#{rev}"] = "HSTR TAU #{k.upcase}  "
-        PAIRS["e#{k}"]   = "HSRN EPS #{k.upcase}  "
-        PAIRS["e#{rev}"] = "HSRN EPS #{k.upcase}  "
+      %w(xy yz zx).each do |k|
+        rev = k.reverse
+        PAIRS["s#{k}"]   = "HSTRTAU #{k.upcase}  "
+        PAIRS["s#{rev}"] = "HSTRTAU #{k.upcase}  "
+        PAIRS["e#{k}"]   = "HSRNEPS #{k.upcase}  "
+        PAIRS["e#{rev}"] = "HSRNEPS #{k.upcase}  "
       end
       PAIRS.each do |key, val|
-        define_method(key){|ige|
-          @data["#{val}@#{ige}"]
+        define_method(key){|*args|
+          unless args.empty?
+            ige = args[0]
+            @data["#{val}@#{ige}"]
+          else
+            $stderr.puts "key:#{key} ==> val: #{val.inspect}" if defined?(IRB)
+            @data.keys.select{|k| k[0...12] == val}.map{|x| x[13..-1]}
+          end
         }
+      end
+      def keys
+        @data.keys
       end
     end
   end

@@ -28,7 +28,13 @@ class FortranUnformattedFile
   #
   # 4Byteの整数を読み込んでいるだけ
   def record_size
-    @io.read(4).unpack("V")[0]  # V: リトルエンディアンの long
+    v = @io.read(4)
+    puts "v is nil" if v.nil?
+    if v
+      v.unpack("V")[0]  # V: リトルエンディアンの long
+    else
+      nil
+    end
   end
   private :record_size
   # 現在のレコードの内容
@@ -39,7 +45,7 @@ class FortranUnformattedFile
   def next_record
     raise "Mode error" unless @readable
     # データの読み込み
-    size = record_size
+    size = record_size or return nil
     @record = @io.read(size)
     check_size = record_size
     # データの整合性チェック
