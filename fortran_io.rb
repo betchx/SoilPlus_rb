@@ -1,19 +1,20 @@
 #! /usr/bin/ruby 
+# encoding: utf-8
+# 
+#Fortran Unformatted ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’å–ã‚Šè¾¼ã‚€ï¼
 #
-#Fortran Unformatted ‚Ìƒtƒ@ƒCƒ‹‚©‚çƒf[ƒ^‚ğæ‚è‚ŞD
-#
-#Unformatted‚È‚Ì‚ÅCƒŒƒR[ƒhƒTƒCƒY‚µ‚©î•ñ‚Í•Û‘¶‚³‚ê‚Ä‚¢‚È‚¢‚ªC
-#ƒŒƒR[ƒh‚Æ‚¢‚¤1‚Â‚Ì‰ò‚Åƒf[ƒ^‚Ì“üo—Í‚ª‚È‚³‚ê‚Ä‚¢‚é‚Ì‚ÅC
-#‚±‚ê‚ğŠî€‚Æ‚µ‚Ä“üo—Í‚ğÀ{‚·‚éD
+#Unformattedãªã®ã§ï¼Œãƒ¬ã‚³ãƒ¼ãƒ‰ã‚µã‚¤ã‚ºã—ã‹æƒ…å ±ã¯ä¿å­˜ã•ã‚Œã¦ã„ãªã„ãŒï¼Œ
+#ãƒ¬ã‚³ãƒ¼ãƒ‰ã¨ã„ã†1ã¤ã®å¡Šã§ãƒ‡ãƒ¼ã‚¿ã®å…¥å‡ºåŠ›ãŒãªã•ã‚Œã¦ã„ã‚‹ã®ã§ï¼Œ
+#ã“ã‚Œã‚’åŸºæº–ã¨ã—ã¦å…¥å‡ºåŠ›ã‚’å®Ÿæ–½ã™ã‚‹ï¼
 
 class FortranUnformattedFile
-  # ƒtƒ@ƒCƒ‹–¼‚ğ—^‚¦‚Äì¬
+  # ãƒ•ã‚¡ã‚¤ãƒ«åã‚’ä¸ãˆã¦ä½œæˆ
   #
-  # ˆø”‚Í‚»‚Ì‚Ü‚ÜopenŠÖ”‚É“n‚³‚ê‚éD
+  # å¼•æ•°ã¯ãã®ã¾ã¾opené–¢æ•°ã«æ¸¡ã•ã‚Œã‚‹ï¼
   def initialize(filename, mode="rb")
     @filename = filename
     unless mode =~ /b/
-      mode += "b"   # binary mode •K{
+      mode += "b"   # binary mode å¿…é ˆ
     end
     @io = File.open(@filename,mode)
     @writable = mode =~ /w/
@@ -23,38 +24,38 @@ class FortranUnformattedFile
   def mode() @io.mode end
 
 
-  # ƒŒƒR[ƒhƒTƒCƒY‚ğ“Ç‚İæ‚é
+  # ãƒ¬ã‚³ãƒ¼ãƒ‰ã‚µã‚¤ã‚ºã‚’èª­ã¿å–ã‚‹
   #
-  # 4Byte‚Ì®”‚ğ“Ç‚İ‚ñ‚Å‚¢‚é‚¾‚¯
+  # 4Byteã®æ•´æ•°ã‚’èª­ã¿è¾¼ã‚“ã§ã„ã‚‹ã ã‘
   def record_size
-    @io.read(4).unpack("V")[0]  # V: ƒŠƒgƒ‹ƒGƒ“ƒfƒBƒAƒ“‚Ì long
+    @io.read(4).unpack("V")[0]  # V: ãƒªãƒˆãƒ«ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã® long
   end
   private :record_size
-  # Œ»İ‚ÌƒŒƒR[ƒh‚Ì“à—e
+  # ç¾åœ¨ã®ãƒ¬ã‚³ãƒ¼ãƒ‰ã®å†…å®¹
   #
-  # ¶ƒf[ƒ^
+  # ç”Ÿãƒ‡ãƒ¼ã‚¿
   attr_reader :record
-  # Ÿ‚ÌƒŒƒR[ƒh‚ğ“Ç‚İ‚ñ‚Å•Ô‚·
+  # æ¬¡ã®ãƒ¬ã‚³ãƒ¼ãƒ‰ã‚’èª­ã¿è¾¼ã‚“ã§è¿”ã™
   def next_record
     raise "Mode error" unless @readable
-    # ƒf[ƒ^‚Ì“Ç‚İ‚İ
+    # ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿
     size = record_size
     @record = @io.read(size)
     check_size = record_size
-    # ƒf[ƒ^‚Ì®‡«ƒ`ƒFƒbƒN
+    # ãƒ‡ãƒ¼ã‚¿ã®æ•´åˆæ€§ãƒã‚§ãƒƒã‚¯
     unless check_size == size
       raise "Data file may be collapsed. #{size} is expected but #{check_size}"
     end
-    # Œ‹‰Ê‚ğ•Ô‚·
+    # çµæœã‚’è¿”ã™
     return record
   end
-  # ƒŒƒR[ƒh‚ÌƒTƒCƒY‚ğ‘‚«‚±‚Şƒ†[ƒeƒBƒŠƒeƒBƒ‹[ƒ`ƒ“
+  # ãƒ¬ã‚³ãƒ¼ãƒ‰ã®ã‚µã‚¤ã‚ºã‚’æ›¸ãã“ã‚€ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£ãƒ«ãƒ¼ãƒãƒ³
   def write_size
     @io.write( [@record.size].pack("V") )
   end
   private :write_size
-  # ˆø”‚Ì•¶š—ñ‚ğƒŒƒR[ƒh‚Æ‚µ‚Ä‘‚«‚ŞD
-  # ‘‚«‚ñ‚¾•¶š—ñ‚Í FortranFile#record ‚ÅŠm”F‚Å‚«‚éD
+  # å¼•æ•°ã®æ–‡å­—åˆ—ã‚’ãƒ¬ã‚³ãƒ¼ãƒ‰ã¨ã—ã¦æ›¸ãè¾¼ã‚€ï¼
+  # æ›¸ãè¾¼ã‚“ã æ–‡å­—åˆ—ã¯ FortranFile#record ã§ç¢ºèªã§ãã‚‹ï¼
   def write_record(dat)
     raise "Mode Error" unless @writable
     #raise ArgumentError, "dat must be String" unless String === dat
@@ -64,38 +65,38 @@ class FortranUnformattedFile
     write_size
     nil
   end
-  # ƒtƒH[ƒ}ƒbƒg‚ğw’è‚µ‚ÄƒŒƒR[ƒh‚ğ“Ç‚İæ‚é
+  # ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚’æŒ‡å®šã—ã¦ãƒ¬ã‚³ãƒ¼ãƒ‰ã‚’èª­ã¿å–ã‚‹
   def get(fmt)
     next_record.unpack(fmt)
   end
-  # ®”‚Ì”z—ñ‚ğ“Ç‚İ‚Ş
+  # æ•´æ•°ã®é…åˆ—ã‚’èª­ã¿è¾¼ã‚€
   def get_int_arr
     get("V*") #V: little endian long
   end
   def get_real_arr
     get "e*"  # e: little endian float
   end
-  # ƒtƒH[ƒ}ƒbƒg‚ğw’è‚µ‚Ä’Pˆê‚ÌƒŒƒR[ƒh‚Æ‚µ‚Ä‘‚«‚Ş
-  # •¶š—ñ‚Ìê‡‚Íwrite_record‚Ì‚Ù‚¤‚ªŠy‚Å‘¬‚¢D
+  # ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚’æŒ‡å®šã—ã¦å˜ä¸€ã®ãƒ¬ã‚³ãƒ¼ãƒ‰ã¨ã—ã¦æ›¸ãè¾¼ã‚€
+  # æ–‡å­—åˆ—ã®å ´åˆã¯write_recordã®ã»ã†ãŒæ¥½ã§é€Ÿã„ï¼
   def put(fmt, *dat)
     write_record dat.pack(fmt)
   end
-  # ®”‚Ì”z—ñ‚ğ’Pˆê‚ÌƒŒƒR[ƒh‚Æ‚µ‚Ä‘‚«‚Ş
+  # æ•´æ•°ã®é…åˆ—ã‚’å˜ä¸€ã®ãƒ¬ã‚³ãƒ¼ãƒ‰ã¨ã—ã¦æ›¸ãè¾¼ã‚€
   def put_int_arr(arr)
     put("V*",*arr)
   end
-  # Fortran‚ÌReal‚Ì”z—ñ‚Æ‚µ‚Äƒf[ƒ^‚ğ‘‚«‚Ş
+  # Fortranã®Realã®é…åˆ—ã¨ã—ã¦ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€
   def put_real_arr(arr)
     put("e*",*arr)
   end
-  # Fortran‚ÌReal*8‚Ì”z—ñ‚Æ‚µ‚Äƒf[ƒ^‚ğ‘‚«‚Ş
+  # Fortranã®Real*8ã®é…åˆ—ã¨ã—ã¦ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€
   def put_real8_arr(arr)
     put("E*",*arr) # E: little endian double
   end
-  # Fortran‚ÌDouble Precition(=real*8)‚Ì”z—ñ‚Æ‚µ‚Äƒf[ƒ^‚ğ‘‚«‚Ş
+  # Fortranã®Double Precition(=real*8)ã®é…åˆ—ã¨ã—ã¦ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€
   alias :put_double_arr :put_real8_arr
 
-  # ƒtƒ@ƒCƒ‹‚ÌI’[‚É“’B‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
+  # ãƒ•ã‚¡ã‚¤ãƒ«ã®çµ‚ç«¯ã«åˆ°é”ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹
   def eof?
     @io.eof?
   end
@@ -104,9 +105,9 @@ class FortranUnformattedFile
     @io.close unless @io.closed?
   end
 
-  # Record‚ğ“Ç‚İ”ò‚Î‚·
+  # Recordã‚’èª­ã¿é£›ã°ã™
   #
-  # self‚ğ•Ô‚·
+  # selfã‚’è¿”ã™
   def skip(n=1)
     n.times do
       next_record
@@ -115,7 +116,7 @@ class FortranUnformattedFile
   end
 
 
-  # Œ»İ‚Ìƒtƒ@ƒCƒ‹ƒ|ƒCƒ“ƒ^‚ÌˆÊ’u‚ğ•Ô‚·
+  # ç¾åœ¨ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒã‚¤ãƒ³ã‚¿ã®ä½ç½®ã‚’è¿”ã™
   def pos
     @io.pos
     return  @io.pos
