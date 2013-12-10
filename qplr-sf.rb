@@ -4,20 +4,17 @@
 # ４節点シェル要素の応力出力から断面力を算出
 #
 # usage:
-#    $0 jobname[.dat] [eids]
+#    $0 file1.f21 [file2.f21 ...]
 #
-#  jobname : datファイルその他のベース名．
-#            簡便のためにdatファイルそのままもOKとする．
-#  eids    : 抽出対象となる要素番号．
-#            省略時は必要な情報が含まれている全要素
+#  引数： f21ファイルのリスト
 
 
 require 'ft21'
 require 'narray'
 
-arg, *limited_eids = ARGV
+ARGV.each do |arg|
 
-base = File.basename(arg,".dat")
+base = File.basename(arg,".f21")
 
 f21 = base + ".f21"
 unless File.file(f21)
@@ -166,4 +163,4 @@ unless sy_eid.empty?
   }
 end
 
-
+end
