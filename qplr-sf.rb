@@ -136,7 +136,7 @@ candidate = dat.select{|line| line =~ /^MKE[L2]/ }.map{|line|
 
 
   dt = res.dt
-  xs = [0...res.nstep].map{|x| x*dt}
+  xs = (0...res.nstep).map{|x| x*dt}
 
   # output
   unless fx_eid.empty?
