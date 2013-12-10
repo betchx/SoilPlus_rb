@@ -30,7 +30,7 @@ end
 def output_data(out, xs, ids, data)
   out.puts ["time",*ids].join(HSEP)
   xs.each_with_index do |i,tm|
-    vals = fx_eids.map{|eid| fx[eid][i]}
+    vals = ids.map{|eid| data[eid][i]}
     out.puts [tm,*vals].join(",")
   end
 end
