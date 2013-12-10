@@ -1,0 +1,4 @@
+*.exe
+.history
+.bash_history
+*.exy

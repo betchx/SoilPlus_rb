@@ -1,0 +1,18 @@
+resource:
+  version:
+    file_version_number   : 0.1.0.0
+    product_version_number: 0.1.0.0
+    comments              : f21ファイルをD&Dで実行可能
+    company_name          : Nikken Sekkei Civil Eng. Ltd.
+    legal_copyright       : Atsushi Tanabe
+    legal_trademarks      : 
+    file_version          : Version 0.1
+    product_version       : Version 0.1
+    product_name          : SoilPlus QPLR elements Section Forces calculator
+    file_description      : SoilPlusシェル要素の断面力算出(2011以前用）
+    internal_name         : QPLR-SF
+    original_filename     : QPLR-SF
+    private_build         : 
+    special_build         : 
+#Section Force/Moment Calculater for Quad Plate Element (tuned for before SoilPlus 2012)
+
