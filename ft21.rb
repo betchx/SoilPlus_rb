@@ -43,6 +43,7 @@ module SoilPlus
         @nstep = nstp
 
       end
+      attr_reader :dt, :nstep
 
       PAIRS = {}
       %w(x y z).each do |k|
@@ -72,13 +73,17 @@ module SoilPlus
             @data["#{val}@#{ige}"]
           else
             $stderr.puts "key:#{key} ==> val: #{val.inspect}" if defined?(IRB)
-            @data.keys.select{|k| k[0...12] == val}.map{|x| x[13..-1]}
+            @data.keys.select{|k| k[0...12] == val}.map{|x| x[13..-1].to_i}
           end
         }
       end
       def keys
         @data.keys
       end
+      def each
+        @data.each{|k,v|  yield k,v}
+      end
+      extend Enumerable
     end
   end
 end
