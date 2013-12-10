@@ -17,7 +17,7 @@ ARGV.each do |arg|
   base = File.basename(arg,".f21")
 
   f21 = base + ".f21"
-  unless File.file(f21)
+  unless File.file?(f21)
     puts "結果ファイル(#{f21})が見つからないため処理できません．"
     exit 1
   end
