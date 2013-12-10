@@ -53,6 +53,10 @@ ARGV.each do |arg|
   # obtain eid list of QPLR   シェル要素の要素ID一覧を取得
   qplr_list = dat.select{|line| line =~ /^QPLR/}.map{|line| QPLR.new(line)}
   qplr_ids = qplr_list.map{|x| x.i}
+  qplr_map = {}
+  qplr_list.each do |q|
+    qplr_map[q.i] = q
+  end
 
   # 板厚と単位幅当り断面係数のリストを作成
   t_list = []
@@ -96,7 +100,7 @@ candidate = dat.select{|line| line =~ /^MKE[L2]/ }.map{|line|
   fx_eid.each do |eid|
     s1 = NArray[*res.sxx(eid)]
     s2 = NArray[*res.Fx_2(eid)]
-    pid = qplr_list[eid].prop
+    pid = qplr_map[eid].prop
     t = t_list[pid]
     z = z_list[pid]
     fx[eid] = (s1+s2)*0.5*t
@@ -105,7 +109,7 @@ candidate = dat.select{|line| line =~ /^MKE[L2]/ }.map{|line|
   sx_eid.each do |eid|
     s1 = NArray[*res.szx(eid)]
     s2 = NArray[*res.Mz_2(eid)]
-    pid = qplr_list[eid].prop
+    pid = qplr_map[eid].prop
     t = t_list[pid]
     sx[eid] = (s1+s2)*0.5*t
   end
@@ -116,7 +120,7 @@ candidate = dat.select{|line| line =~ /^MKE[L2]/ }.map{|line|
   fy_eid.each do |eid|
     s1 = NArray[*res.syy(eid)]
     s2 = NArray[*res.Fy_2(eid)]
-    pid = qplr_list[eid].prop
+    pid = qplr_map[eid].prop
     t = t_list[pid]
     z = z_list[pid]
     fy[i] = (s1+s2)*0.5*t
@@ -125,7 +129,7 @@ candidate = dat.select{|line| line =~ /^MKE[L2]/ }.map{|line|
   sy_eid.each do |eid|
     s1 = NArray[*res.syz(eid)]
     s2 = NArray[*res.My_2(eid)]
-    pid = qplr_list[eid].prop
+    pid = qplr_map[eid].prop
     t = t_list[pid]
     sy[eid] = (s1+s2)*0.5*t
   end
