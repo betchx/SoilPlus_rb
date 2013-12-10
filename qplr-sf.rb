@@ -12,6 +12,30 @@
 require 'ft21'
 require 'narray'
 
+HSEP = ", elm "  # ヘッダのセパレータ
+
+# シェル要素の情報をパースし保持するためのクラス
+class QPLR
+  def initialize(line)
+    @i = line[8,8].to_i
+    @mat = line[16,8].to_i
+    @prop = line[24,8].to_i
+    @nodes = line[40,8*4].unpack("a8"*4).map{|x| x.to_i}
+  end
+  attr_reader :i, :mat, :prop, :nodes
+  def [](n) @nodes[n] end
+end
+
+# 出力の下請け関数
+def output_data(out, xs, ids, data)
+  out.put ["time",*ids].join(HSEP)
+  xs.each_with_index do |i,tm|
+    vals = fx_eids.map{|eid| fx[eid][i]}
+    out.puts [tm,*vals].join(",")
+  end
+end
+
+
 ARGV.each do |arg|
 
   base = File.basename(arg,".f21")
@@ -24,16 +48,6 @@ ARGV.each do |arg|
 
   dat = open(base+".dat","rb").readlines
 
-  class QPLR
-    def initialize(line)
-      @i = line[8,8].to_i
-      @mat = line[16,8].to_i
-      @prop = line[24,8].to_i
-      @nodes = line[40,8*4].unpack("a8"*4).map{|x| x.to_i}
-    end
-    attr_reader :i, :mat, :prop, :nodes
-    def [](n) @nodes[n] end
-  end
 
 
   # obtain eid list of QPLR   シェル要素の要素ID一覧を取得
@@ -116,15 +130,6 @@ candidate = dat.select{|line| line =~ /^MKE[L2]/ }.map{|line|
     sy[eid] = (s1+s2)*0.5*t
   end
 
-  HSEP = ", elm "  # ヘッダのセパレータ
-
-  def output_data(out, xs, ids, data)
-    out.put ["time",*ids].join(HSEP)
-    xs.each_with_index do |i,tm|
-      vals = fx_eids.map{|eid| fx[eid][i]}
-      out.puts [tm,*vals].join(",")
-    end
-  end
 
   dt = res.dt
   xs = [0...res.nstep].map{|x| x*dt}
