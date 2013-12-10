@@ -29,7 +29,7 @@ end
 # 出力の下請け関数
 def output_data(out, xs, ids, data)
   out.puts ["time",*ids].join(HSEP)
-  xs.each_with_index do |i,tm|
+  xs.each_with_index do |tm,i|
     vals = ids.map{|eid| data[eid][i]}
     out.puts [tm,*vals].join(",")
   end
