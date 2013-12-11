@@ -29,7 +29,7 @@ class FortranUnformattedFile
   # 4Byteの整数を読み込んでいるだけ
   def record_size
     v = @io.read(4)
-    puts "v is nil" if v.nil?
+    #puts "v is nil" if v.nil?
     if v
       v.unpack("V")[0]  # V: リトルエンディアンの long
     else
