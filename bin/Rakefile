@@ -1,7 +1,5 @@
 # coding: utf-8
 
-$LOAD_PATH.unshift "../lib"
-
 exes = FileList['*.rb'].pathmap("%X.exe")
 
 task :default => exes #["qplr-sf.exe"]
@@ -14,7 +12,7 @@ rule '.exy' => ['.rb', '.ver'] do |t|
   rb,ver = *t.sources
   puts rb
   puts ver
-  sh "ruby -r exerb/mkexy #{rb}"
+  sh "ruby -I ../lib -r exerb/mkexy #{rb}"
   exy = t.name
   tmp = exy + ".tmp"
   File.rename(exy, tmp)
