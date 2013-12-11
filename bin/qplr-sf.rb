@@ -9,7 +9,7 @@
 #  引数： f21ファイルのリスト
 
 
-require 'ft21'
+require 'soilplus/results/ft21'
 require 'narray'
 
 HSEP = ", elm "  # ヘッダのセパレータ
