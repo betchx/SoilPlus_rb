@@ -1,7 +1,10 @@
+# coding: utf-8
 
+$LOAD_PATH.unshift "../lib"
 
+exes = FileList['*.rb'].pathmap("%X.exe")
 
-task :default => ["qplr-sf.exe"]
+task :default => exes #["qplr-sf.exe"]
 
 rule 'exe' => '.exy' do |t|
   sh "exerb #{t.source}"
