@@ -37,12 +37,13 @@ end
 
 
 ARGV.each do |arg|
-
+begin
   base = File.basename(arg,".f21")
 
   f21 = base + ".f21"
   unless File.file?(f21)
     puts "結果ファイル(#{f21})が見つからないため処理できません．"
+    gets
     exit 1
   end
 
@@ -171,5 +172,12 @@ candidate = dat.select{|line| line =~ /^MKE[L2]/ }.map{|line|
       output_data(out, xs, sy_eid, sy)
     }
   end
+rescue
+  puts "Error occurred. Press Enter to exit."
+  gets
+  raise
+end
 
 end
+
+
