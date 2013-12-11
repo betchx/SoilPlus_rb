@@ -124,9 +124,10 @@ candidate = dat.select{|line| line =~ /^MKE[L2]/ }.map{|line|
     pid = qplr_map[eid].prop
     t = t_list[pid]
     z = z_list[pid]
-    fy[i] = (s1+s2)*0.5*t
-    my[i] = (s1-s2)*0.5*z    # sigma = M/Z => M = siga * Z
+    fy[eid] = (s1+s2)*0.5*t
+    my[eid] = (s1-s2)*0.5*z    # sigma = M/Z => M = siga * Z
   end
+  sy = []
   sy_eid.each do |eid|
     s1 = NArray[*res.syz(eid)]
     s2 = NArray[*res.My_2(eid)]
