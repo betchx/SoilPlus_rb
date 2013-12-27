@@ -1,5 +1,12 @@
 # coding: utf-8
 
+if RUBY_PLATFORM =~ /mingw/
+  disp_coding = "-s"
+else
+  disp_coding = "-w"
+end
+require 'nkf'
+
 exes = FileList['*.rb'].pathmap("%X.exe")
 
 task :default => exes #["qplr-sf.exe"]
@@ -54,7 +61,7 @@ resource:
     special_build         : 
     NNN
   end
-  raise "#{t.name}の修正が必要です．"
+  raise NKF.nkf(disp_coding, "#{t.name}の修正が必要です．")
 end
 
 
