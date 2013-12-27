@@ -37,8 +37,9 @@ rule '.exy' => ['.rb', '.ver'] do |t|
   File.unlink(tmp)
 end
 
+task :ver => exes.pathmap("%X.ver")
 
-file '.ver' do |t|
+rule '.ver' do |t|
   open(t.name,"w")do |out|
     out.puts <<-NNN
 # -*- mode: yaml; coding: utf-8 -*-
