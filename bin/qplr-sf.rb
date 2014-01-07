@@ -31,7 +31,7 @@ def output_data(out, xs, ids, data)
   out.puts ["time",*ids].join(HSEP)
   xs.each_with_index do |tm,i|
     vals = ids.map{|eid| data[eid][i]}
-    out.puts [tm,*vals].join(",")
+    out.puts [tm,*vals].map{|x|sprintf("%.4g",x)}.join(",")
   end
 end
 
