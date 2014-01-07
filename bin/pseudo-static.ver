@@ -1,0 +1,18 @@
+# -*- mode: yaml; coding: utf-8 -*-
+# vim: set fenc=utf-8 :
+resource:
+  version:
+    file_version_number   : 0.1.0.0
+    product_version_number: 0.1.0.0
+    comments              : 擬似静的解析化（質量微小化＋減衰ゼロ化)
+    company_name          : Nikken Sekkei Civil Eng. Ltd.
+    legal_copyright       : Atsushi Tanabe
+    legal_trademarks      : 
+    file_version          : Version 0.1
+    product_version       : Version 0.1
+    product_name          : 
+    file_description      : 擬似静的解析化
+    internal_name         : pseudo-static
+    original_filename     : pseudo-static.rb
+    private_build         : 
+    special_build         : 
