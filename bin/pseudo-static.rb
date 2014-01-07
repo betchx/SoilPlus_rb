@@ -13,7 +13,7 @@ ARGV.each do |file|
       while line = f.gets
         case line
         when /^MAT /
-          line[-10..-3] = "  0.0001"
+          line[-10..-3] = sprintf("%8g",0.1)
           out.puts line
         when /^PDMP/
           #out.puts "**   " + line
