@@ -29,6 +29,8 @@ ARGV.each do |arg|
     exit 1
   end
 
+  Dir.mkdir(base) unless File.directory?(base)
+
   res = SoilPlus::Results::Dynamic.new(f21)
 
   dt = res.dt
@@ -39,7 +41,7 @@ ARGV.each do |arg|
     unless ids.empty?
       ids.sort!
       data = ids.map{|i| res.send(key,i)}
-      fname = "#{base}-#{key}.csv"
+      fname = "#{base}/#{base}-#{key}.csv"
       separator = is_node?(key) ? NODE_SEP : ELEMENT_SEP
       open(fname, "wb"){|out|
         out.puts ["time",*ids].join(separator)
