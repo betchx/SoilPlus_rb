@@ -9,6 +9,7 @@
 #  引数： f21ファイルのリスト
 
 
+require 'optparse'
 require 'soilplus/results/ft21'
 require 'narray'
 
@@ -18,6 +19,46 @@ NODE_SEP = ", node "    # ヘッダのセパレータ for Node
 def is_node?(key)
   %w(a v u).include?(key[0,1])
 end
+
+$tags = []
+
+OptionParser.new do |opt|
+  all_key = SoilPlus::Results::Dynamic::PAIRS.keys
+  # nodes
+  opt.on('-a', '--acc', "Output Acceleration") do
+    $tags.concat all_key.select{|k| k =~ /^a/}
+  end
+  opt.on('-v', "--vel", "Output Velocity") do
+    $tags.concat all_key.select{|k| k =~ /^v/}
+  end
+
+  opt.on('-u', "--dis", "Output Displacement") do
+    $tags.concat all_key.select{|k| k =~ /^u/}
+  end
+
+  opt.on('-N', "--node","Output Node results (ACC, Vel, Dis)") do
+    $tags.concat all_key.select{|k| k =~ /^[avu]/}
+  end
+
+  #elements
+  opt.on('-E', '--element', "Output Element Results")do
+    $tags.concat all_key.select{|k| k !~ /^[avu]/}
+  end
+  opt.on('-s', '--stress', "Output Stresses") do
+    $tags.concat all_key.select{|k| k =~ /^s/}
+  end
+  opt.on('-e', '--strain', "Output Strains") do
+    $tags.concat all_key.select{|k| k =~/^e/}
+  end
+  opt.on('-f', '--force', "Output Section Forces and Moments") do
+    $tags.concat all_key.select{|k| k =~/^[FM]/}
+  end
+  opt.parse!(ARGV)
+  if $tags.empty?
+    $tags = SoilPlus::Results::Dynamic::PAIRS.keys
+  end
+end
+
 
 ARGV.each do |arg|
   base = File.basename(arg,".f21")
@@ -36,7 +77,7 @@ ARGV.each do |arg|
   dt = res.dt
   xs = (0...res.nstep).map{|x| x*dt}
 
-  SoilPlus::Results::Dynamic::PAIRS.keys.each do |key|
+  $tags.each do |key|
     ids = res.send(key)
     unless ids.empty?
       ids.sort!

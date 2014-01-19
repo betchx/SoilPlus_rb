@@ -50,7 +50,7 @@ module SoilPlus
         u = k.upcase
         kk = k + k
         PAIRS["s#{kk}"]  = "HSTRSIG  #{u}  "
-        PAIRS["E#{kk}"]  = "HSRNEPS  #{u}  "
+        PAIRS["e#{kk}"]  = "HSRNEPS  #{u}  "
         PAIRS["F#{k}_1"] = "HFRCFRC  #{u}  "
         PAIRS["F#{k}_2"] = "HFRCFRC2 #{u}  "
         PAIRS["M#{k}_1"] = "HFRCMOM  #{u}  "
