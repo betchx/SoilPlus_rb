@@ -1,10 +1,10 @@
 #! /usr/bin/ruby
 # encoding: utf-8
 #
-# ４節点シェル要素の応力出力から断面力を算出
+# f21 ファイルのデータを出力する
 #
 # usage:
-#    $0 file1.f21 [file2.f21 ...]
+#    $0 [options] file1.f21 [file2.f21 ...]
 #
 #  引数： f21ファイルのリスト
 
