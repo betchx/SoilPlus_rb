@@ -44,8 +44,8 @@ ARGV.each do |arg|
       open(fname, "wb"){|out|
         out.puts ["time",*ids].join(separator)
         xs.each_with_index do |tm,i|
-          vals = data.map{|wave| wave[i]}
-          out.puts [tm,*vals].join(",")
+          vals = data.map{|wave| sprintf("%g",wave[i])}
+          out.puts [sprintf("%g",tm),*vals].join(",")
         end
       }
     end
