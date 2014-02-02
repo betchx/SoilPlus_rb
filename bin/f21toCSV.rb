@@ -75,7 +75,8 @@ ARGV.each do |arg|
   res = SoilPlus::Results::Dynamic.new(f21)
 
   dt = res.dt
-  xs = (0...res.nstep).map{|x| x*dt}
+  # 時刻ゼロのデータは出力されないので，1からスタート
+  xs = (1..res.nstep).map{|x| x*dt}
 
   $tags.each do |key|
     ids = res.send(key)
