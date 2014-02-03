@@ -21,6 +21,7 @@ def is_node?(key)
 end
 
 $tags = []
+$interval = 1
 
 OptionParser.new do |opt|
   all_key = SoilPlus::Results::Dynamic::PAIRS.keys
@@ -53,6 +54,10 @@ OptionParser.new do |opt|
   opt.on('-f', '--force', "Output Section Forces and Moments") do
     $tags.concat all_key.select{|k| k =~/^[FM]/}
   end
+
+  opt.on('-i N', '--interval=N', "Output Each N"){|n|
+    $interval = n.to_i
+  }
   opt.parse!(ARGV)
   if $tags.empty?
     $tags = SoilPlus::Results::Dynamic::PAIRS.keys
@@ -88,8 +93,10 @@ ARGV.each do |arg|
       open(fname, "wb"){|out|
         out.puts ["time",*ids].join(separator)
         xs.each_with_index do |tm,i|
-          vals = data.map{|wave| sprintf("%g",wave[i])}
-          out.puts [sprintf("%g",tm),*vals].join(",")
+          if (i+1) % $interval == 0   # +1 は時刻ゼロが無いことを反映するため．
+            vals = data.map{|wave| sprintf("%g",wave[i])}
+            out.puts [sprintf("%g",tm),*vals].join(",")
+          end
         end
       }
     end
