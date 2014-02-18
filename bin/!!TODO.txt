@@ -1,0 +1,11 @@
+
+README更新
+* f21toCSV      ： 動的解析結果展開
+* f57_dumper    ： 静的解析結果の展開
+* pseudo-static ： 擬似静的解析化ツール
+
+
+ファイル名の変更
+たとえば，f57_dumper
+
+
