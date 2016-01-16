@@ -1,0 +1,18 @@
+# -*- mode: yaml; coding: utf-8 -*-
+# vim: set fenc=utf-8 :
+resource:
+  version:
+    file_version_number   : 0.1.0.0
+    product_version_number: 0.1.0.0
+    comments              : f22ファイルをD&Dで実行可能
+    company_name          : Nikken Sekkei Civil Eng. Ltd.
+    legal_copyright       : Atsushi Tanabe
+    legal_trademarks      : 
+    file_version          : Version 0.1.0
+    product_version       : Version 0.1.0
+    product_name          : CSV converter for SoilPlus SS-Curve Output
+    file_description      : SoilPlusの応力ひずみ曲線をCSVで出力
+    internal_name         : f22toCSV
+    original_filename     : f22toCSV.rb
+    private_build         : 
+    special_build         : 
