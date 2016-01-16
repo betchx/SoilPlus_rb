@@ -43,7 +43,7 @@ OptionParser.new do |opt|
 
   #elements
   opt.on('-E', '--element', "Output Element Results")do
-    $tags.concat all_key.select{|k| k !~ /^[avu]/}
+    $tags.concat all_key.select{|k| k !~ /^[seFM]/}
   end
   opt.on('-s', '--stress', "Output Stresses") do
     $tags.concat all_key.select{|k| k =~ /^s/}
